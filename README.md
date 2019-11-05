@@ -29,15 +29,17 @@ Then:
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
 ```bash
-ssh root@192.168.1.33 service oucher stop # Not needed if you're installing for the first time.
+ssh root@192.168.1.33 service oucher stop
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
-ssh root@192.168.1.33 apt-get update
-ssh root@192.168.1.33 apt-get install espeak alsa-utils
-ssh root@192.168.1.33 apt-get clean
+ssh root@192.168.1.33 apt-get -y update
+ssh root@192.168.1.33 apt-get -y install espeak alsa-utils
+ssh root@192.168.1.33 apt-get -y clean
 ssh root@192.168.1.33 service oucher start
 ```
 Just replace `192.168.1.33` with your Roborock IP.
+
+If you're installing for the first time, the first command will return an error. That's normal, don't worry about it.
 
 Done! Just start a clean and wait for the first bump ;)
 
