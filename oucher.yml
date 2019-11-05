@@ -1,0 +1,22 @@
+# Set the language of the pronounced phrases.
+# - default: "en"
+language: "en"
+
+# Set the volume of the pronounced phrases from 0 to 100.
+# Please note that this only works for text-to-speech phrases, and not for WAV files (for now).
+# WAV files are always played at full volume, so make sure to process the file itself to match what you want.
+# - default: 100
+volume: 100
+
+# Set the phrases you want to pronounce (there are three default English phrases):
+# If you don't want text-to-speech, but only WAV files, force it to empty like this:
+# phrases: []
+phrases:
+  - "Ouch!"
+  - "Argh!"
+  - "Hey, it hurts!"
+
+# Set the directory where WAV files are stored
+# If the directory doesn't exist, it is ignored.
+# - default: "/usr/lib/oucher/sounds"
+soundsPath: "/usr/lib/oucher/sounds"
