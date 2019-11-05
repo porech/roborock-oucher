@@ -50,6 +50,8 @@ scp oucher.yml root@192.168.1.33:/etc
 ```
 Just replace `192.168.1.33` with your Roborock IP.
 
+Remember to restart the service with `service oucher restart` each time you make changes to the configuration, because the file is read on startup only.
+
 ## Can I use real screams?
 Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
@@ -59,7 +61,25 @@ The phrase will be chosen randomly on every bump, from the textual or WAV ones. 
 phrases: []
 ```
 
+Remember to restart the service with `service oucher restart` each time you add or remove a WAV file, because the list is loaded on startup only.
+
 To avoid copyright issues, we're not going to put WAV files here in the repo at the moment. Anyway, you can find something useful [on this page](https://www.shockwave-sound.com/free-sound-effects/scream-sounds).
+
+## How can I remove it?
+If you just want to disable the software but be able to enable it back easily, you can just set `enabled: false` in the configuration. This way, the software does absolutely nothing: after loading the configuration, it just sleeps, without reading the log file or anything else.
+
+If you want to totally remove the software, just delete the `/usr/local/bin/oucher`and `/etc/init/oucher.conf` files. If you uploaded a custom configuration, also delete `/etc/oucher.yml`. If you uploaded custom sounds, also remove the `/usr/lib/oucher`folder.  
+You won't also need espeak and alsa-utils anymore, so you can remove them with `apt-get remove espeak alsa-utils` followed by an `apt-get autoremove` to uninstall their dependencies.
+
+From the shell:
+```bash
+ssh root@192.168.1.33 rm /usr/local/bin/oucher /etc/init/oucher.conf
+ssh root@192.168.1.33 rm /etc/oucher.yml
+ssh root@192.168.1.33 rm -r /usr/lib/oucher
+ssh root@192.168.1.33 apt-get remove espeak alsa-utils
+ssh root@192.168.1.33 apt-get autoremove
+```
+Just replace `192.168.1.33` with your Roborock IP.
 
 ## How does it work?
 The Roborock service logs everything that happens while cleaning in a file: `/run/shm/NAV_normal.log`. This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay`, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
