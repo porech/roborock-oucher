@@ -53,7 +53,7 @@ Just replace `192.168.1.33` with your Roborock IP.
 Remember to restart the service with `service oucher restart` each time you make changes to the configuration, because the file is read on startup only.
 
 ## Can I use real screams?
-Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
+Yes! You can create the /mnt/data/oucher/sounds folder (`mkdir -p /mnt/data/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
 
 The phrase will be chosen randomly on every bump, from the textual or WAV ones. If you want to use WAV files only, set the phrases to an empty array in the config file:

@@ -27,5 +27,5 @@ phrases:
 
 # Set the directory where WAV files are stored
 # If the directory doesn't exist, it is ignored.
-# - default: "/usr/lib/oucher/sounds"
-soundsPath: "/usr/lib/oucher/sounds"
+# - default: "/mnt/data/oucher/sounds"
+soundsPath: "/mnt/data/oucher/sounds"

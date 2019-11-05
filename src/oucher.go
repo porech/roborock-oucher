@@ -47,7 +47,7 @@ func main() {
 
 	// Set default configuration
 	viper.SetDefault("enabled", true)
-	viper.SetDefault("soundsPath", "/usr/lib/oucher/sounds")
+	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
 	viper.SetDefault("logPath", "/run/shm/NAV_normal.log")
 	viper.SetDefault("language", "en")
 	viper.SetDefault("volume", 100)
@@ -95,7 +95,7 @@ func main() {
 		phrases = append(phrases, newPhrase)
 	}
 
-	// Search for wav files in /usr/lib/oucher/sounds and add them to the list
+	// Search for wav files in the sounds path and add them to the list
 	if dirExists(config.SoundsPath) {
 		files, err := ioutil.ReadDir(config.SoundsPath)
 		if err != nil {
