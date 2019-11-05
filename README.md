@@ -1,4 +1,5 @@
 # Roborock Oucher
+![Roborock Oucher logo](https://i.ibb.co/5K16Hxr/oucher.jpg)
 
 ## What is it?
 Some time ago, Michael Reeves made [a video that went viral](https://www.youtube.com/watch?v=mvz3LRK263E), with a Roomba that was modded to scream when it hurts an obstacle. Michael removed many components from the Roomba, and that made the robot really funny but totally useless.
