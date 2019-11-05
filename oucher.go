@@ -187,6 +187,7 @@ func initFollower(filename string) (*follower.Follower, error) {
 
 // Process a single line
 func processLine(line string, phrases []phrase, config *configuration) {
+	log.Tracef("Received line: %s", line)
 	// If there is no ":Bumper" in the line, do nothing
 	if !strings.Contains(line, ":Bumper") {
 		return
@@ -197,17 +198,25 @@ func processLine(line string, phrases []phrase, config *configuration) {
 		return
 	}
 
+	log.Debugf("Received valid line: %s", line)
+
 	// If there is already an ouch in progress, do nothing
 	if IsOuching {
+		log.Debug("Already ouching, doing nothing")
 		return
 	}
 
+	// Ouch!
+	ouch(phrases, config)
+}
+
+func ouch(phrases []phrase, config *configuration) {
 	// Set the ouching semaphore as true
 	IsOuching = true
 
 	// Choose a random phrase
 	sayPhrase := phrases[rand.Intn(len(phrases))]
-
+	log.Debugf("Chosen phrase: %s", sayPhrase.Text)
 	// Say the phrase in a goroutine
 	if sayPhrase.Type == Text {
 		go eSpeak(sayPhrase.Text, config.Language, config.Volume)
@@ -218,7 +227,7 @@ func processLine(line string, phrases []phrase, config *configuration) {
 
 // Invoke the espeak command, piping it with aplay, and set the ouching semaphore to false after it finishes
 func eSpeak(phrase, language string, volume int) {
-	espeakCmd := exec.Command("espeak", "-a", strconv.Itoa(volume*2), "-v", language, phrase)
+	espeakCmd := exec.Command("espeak", "--stdout", "-a", strconv.Itoa(volume*2), "-v", language, phrase)
 	aplayCmd := exec.Command("aplay", "-")
 	r, w := io.Pipe()
 	espeakCmd.Stdout = w
