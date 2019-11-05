@@ -35,7 +35,7 @@ type configuration struct {
 	Language   string   `mapstructure:language`
 	Volume     int      `mapstructure:volume`
 	SoundsPath string   `mapstructure:soundsPath`
-	LogPath    string   `mapstructure:logPath`
+	LogPaths   []string `mapstructure:logPaths`
 	LogLevel   string   `mapstructure:logLevel`
 	Phrases    []string `mapstructure:phrases`
 	Delay      int      `mapstructure:delay`
@@ -48,7 +48,7 @@ func main() {
 	// Set default configuration
 	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
-	viper.SetDefault("logPath", "/run/shm/NAV_normal.log")
+	viper.SetDefault("logPaths", []string{"/run/shm/NAV_normal.log", "/run/shm/PLAYER_fprintf.log"})
 	viper.SetDefault("language", "en")
 	viper.SetDefault("volume", 100)
 	viper.SetDefault("phrases", []string{"Ouch!", "Argh!", "Hey, it hurts!"})
@@ -115,8 +115,18 @@ func main() {
 		}
 	}
 
-	FilePath := config.LogPath
-	log.Debugf("Reading log from %s", FilePath)
+	// For each log path, start the watching routine
+	for _, FilePath := range config.LogPaths {
+		log.Debugf("Starting log watching from %s", FilePath)
+		go watchLog(FilePath, phrases, &config)
+	}
+
+	// Sit and wait
+	select {}
+}
+
+// Keeps a file watched and calls processLine on every line
+func watchLog(FilePath string, phrases []phrase, config *configuration) {
 	for {
 		// If the file does not exist, wait for a second and restart the loop
 		if !fileExists(FilePath) {
@@ -136,7 +146,7 @@ func main() {
 
 		// Process every line
 		for line := range t.Lines() {
-			processLine(line.String(), phrases, &config)
+			processLine(line.String(), phrases, config)
 		}
 
 		// If the follower exited with an error, log it, wait a second and restart the loop
@@ -201,7 +211,7 @@ func initFollower(filename string) (*follower.Follower, error) {
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
 	// If there is no ":Bumper" in the line, do nothing
-	if !strings.Contains(line, ":Bumper") {
+	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, " bumper ") {
 		return
 	}
 

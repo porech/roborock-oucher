@@ -10,6 +10,7 @@ However, the Roborock, better known as Xiaomi Mi Vacuum Cleaner, already has all
 It has been tested on:
 - Xiaomi Mi Vacuum Cleaner gen1
 - Xiaomi Mi Vacuum Cleaner gen2
+- Roborock S5
 
 It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is just that it doesn't work. The screams, not the robot ;)
 
