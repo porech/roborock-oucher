@@ -45,8 +45,14 @@ Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `
 scp oucher.yml root@192.168.1.33:/etc
 ```
 Just replace `192.168.1.33` with your Roborock IP.
-You can also create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there.
-The phrase will be chosen randomly on every bump, from the textual or WAV ones.
+
+## Can I use real screams?
+Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
+The phrase will be chosen randomly on every bump, from the textual or WAV ones. If you want to use WAV files only, set the phrases to an empty array in the config file:
+'''
+phrases: []
+'''
+To avoid copyright issues, we're not going to put WAV files here in the repo at the moment. Anyway, you can find something useful [on this page](https://www.shockwave-sound.com/free-sound-effects/scream-sounds).
 
 ## How does it work?
 The Roborock service logs everything that happens while cleaning in a file: `/run/shm/NAV_normal.log`. This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay`, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
@@ -59,7 +65,7 @@ Of course! Short-term plans are:
 Anyway, we're sure you can get a great amount of fun with what already exists ;)
 
 ## I tried this and now my robot doesn't work! Shame on you!
-Sorry for your loss :)
+Sorry for your loss :)  
 Seriously: we're pretty confident it's not an issue with our software, since it really doesn't touch anything on the system.
 Most probably, you had some trouble with the root procedure. It's really hard to brick a Roborock, so maybe you'll find a solution if you search carefully on the dedicated channels. As said above, we're not giving support about the root procedure.
 
