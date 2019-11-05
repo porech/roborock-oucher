@@ -37,6 +37,7 @@ type configuration struct {
 	LogPath    string   `mapstructure:logPath`
 	LogLevel   string   `mapstructure:logLevel`
 	Phrases    []string `mapstructure:phrases`
+	Delay      int      `mapstructure:delay`
 }
 
 func main() {
@@ -206,23 +207,31 @@ func processLine(line string, phrases []phrase, config *configuration) {
 		return
 	}
 
-	// Ouch!
-	ouch(phrases, config)
-}
-
-func ouch(phrases []phrase, config *configuration) {
 	// Set the ouching semaphore as true
 	IsOuching = true
 
+	// Ouch!
+	go ouch(phrases, config)
+}
+
+func ouch(phrases []phrase, config *configuration) {
 	// Choose a random phrase
 	sayPhrase := phrases[rand.Intn(len(phrases))]
 	log.Debugf("Chosen phrase: %s", sayPhrase.Text)
-	// Say the phrase in a goroutine
+	// Say the phrase
 	if sayPhrase.Type == Text {
-		go eSpeak(sayPhrase.Text, config.Language, config.Volume)
+		eSpeak(sayPhrase.Text, config.Language, config.Volume)
 	} else {
-		go aPlay(sayPhrase.Text)
+		aPlay(sayPhrase.Text)
 	}
+
+	// If there is a delay set, wait before resetting the semaphore
+	if config.Delay > 0 {
+		time.Sleep(time.Duration(config.Delay) * time.Second)
+	}
+
+	// Unset the ouching semaphore
+	IsOuching = false
 }
 
 // Invoke the espeak command, piping it with aplay, and set the ouching semaphore to false after it finishes
@@ -242,7 +251,7 @@ func eSpeak(phrase, language string, volume int) {
 	w.Close()
 	aplayCmd.Wait()
 	io.Copy(os.Stdout, &b2)
-	IsOuching = false
+
 }
 
 // Invoke the aplay command, and set the ouching semaphore to false after it finishes
@@ -254,5 +263,4 @@ func aPlay(file string) {
 	aplayCmd.Start()
 	aplayCmd.Wait()
 	io.Copy(os.Stdout, &b)
-	IsOuching = false
 }

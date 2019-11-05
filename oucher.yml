@@ -8,6 +8,11 @@ language: "en"
 # - default: 100
 volume: 100
 
+# Set a minimum delay between the screams, in seconds.
+# If two bumps occurr sequentially in the given delay, the second one is ignored.
+# - default: 0
+delay: 0
+
 # Set the phrases you want to pronounce (there are three default English phrases):
 # If you don't want text-to-speech, but only WAV files, force it to empty like this:
 # phrases: []
