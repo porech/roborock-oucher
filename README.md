@@ -28,8 +28,8 @@ Then:
 - Start the service: `service oucher start` (or just reboot the device)
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
-```
-ssh root@192.168.1.33 service oucher stop # If you're installing for the first time, this will give an error. Don't worry.
+```bash
+ssh root@192.168.1.33 service oucher stop # Not needed if you're installing for the first time.
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
 ssh root@192.168.1.33 apt-get update
@@ -43,7 +43,7 @@ Done! Just start a clean and wait for the first bump ;)
 
 ## Can I customize the phrases?
 Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `/etc` folder. From a shell:
-```
+```bash
 scp oucher.yml root@192.168.1.33:/etc
 ```
 Just replace `192.168.1.33` with your Roborock IP.
@@ -53,7 +53,7 @@ Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
 
 The phrase will be chosen randomly on every bump, from the textual or WAV ones. If you want to use WAV files only, set the phrases to an empty array in the config file:
-```
+```yaml
 phrases: []
 ```
 
