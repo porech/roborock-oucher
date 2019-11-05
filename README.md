@@ -16,11 +16,10 @@ In all of this README I will talk about "Roborock" to mention the robot. This is
 ## How do I install this?
 First of all, you need to have a rooted Roborock. Please refer to [this wiki page](https://github.com/dgiese/dustcloud/wiki/VacuumRobots-manual-update-root-Howto) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
 
-Download the oucher.sh and oucher.conf files from this repository, or just clone the entire repo.  
-Then, you can edit the oucher.sh file and change the phrases that will be pronounced: a random one will be chosen each time. Make sure to set the correct language or the phrases will be pronunced in a strange way.
+Download the oucher and oucher.conf files from this repository, or just clone the entire repo.
 
 Then:
-- Copy oucher.sh to the Roborock, in /usr/local/bin
+- Copy oucher to the Roborock, in /usr/local/bin
 - Copy oucher.conf to the Roborock, in /etc/init
 - Log into SSH to the device
 - Install espeak and alsa-utils: `apt-get update && apt-get install espeak alsa-utils && apt-get clean`
@@ -28,7 +27,7 @@ Then:
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
 ```
-scp oucher.sh root@192.168.1.33:/usr/local/bin
+scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
 ssh root@192.168.1.33 apt-get update
 ssh root@192.168.1.33 apt-get install espeak alsa-utils
@@ -38,6 +37,15 @@ ssh root@192.168.1.33 service oucher start
 Just replace `192.168.1.33` with your Roborock IP.
 
 Done! Just start a clean and wait for the first bump ;)
+
+## Can I customize the phrases?
+Sure! Just customize the oucher.yml file and copy it to the Roborock, in the /etc folder. From a shell:
+```
+scp oucher.yml root@192.168.1.33:/etc
+```
+Just replace `192.168.1.33` with your Roborock IP.
+You can also create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there.
+The phrase will be chosen randomly on every bump.
 
 ## How does it work?
 The Roborock service logs everything that happens while cleaning in a file: `/run/shm/NAV_normal.log`. This includes bumps into obstacles. The scripts just follows the log file and invokes `espeak` everytime a bump occurs. A one-second delay is added after each pronounced phrase to avoid continuous screams.
@@ -51,8 +59,8 @@ Of course! We made this simple script just to make sure it was possible to achie
 Anyway, we're sure you can get a great amount of fun with what already exists ;)
 
 ## I tried this and now my robot doesn't work! Shame on you!
-Sorry for your loss :)  
-Seriously: we're pretty confident it's not an issue with our script, since it really doesn't touch anything on the system.  
+Sorry for your loss :)
+Seriously: we're pretty confident it's not an issue with our script, since it really doesn't touch anything on the system.
 Most probably, you had some trouble with the root procedure. It's really hard to brick a Roborock, so maybe you'll find a solution if you search carefully on the dedicated channels. As said above, we're not giving support about the root procedure.
 
 ## I followed the procedure but the robot doesn't ouch
