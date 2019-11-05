@@ -20,6 +20,7 @@ First of all, you need to have a rooted Roborock. Please refer to [this wiki pag
 Download the `oucher` and `oucher.conf` files from this repository, or just clone the entire repo.
 
 Then:
+- If you already had a previous version, stop the oucher service: `service oucher stop`
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy `oucher.conf` to the Roborock, in `/etc/init`
 - Log into SSH to the device
@@ -28,6 +29,7 @@ Then:
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
 ```
+ssh root@192.168.1.33 service oucher stop # If you're installing for the first time, this will give an error. Don't worry.
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
 ssh root@192.168.1.33 apt-get update
