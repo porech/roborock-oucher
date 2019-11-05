@@ -48,10 +48,13 @@ Just replace `192.168.1.33` with your Roborock IP.
 
 ## Can I use real screams?
 Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
+If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
+
 The phrase will be chosen randomly on every bump, from the textual or WAV ones. If you want to use WAV files only, set the phrases to an empty array in the config file:
-'''
+```
 phrases: []
-'''
+```
+
 To avoid copyright issues, we're not going to put WAV files here in the repo at the moment. Anyway, you can find something useful [on this page](https://www.shockwave-sound.com/free-sound-effects/scream-sounds).
 
 ## How does it work?
