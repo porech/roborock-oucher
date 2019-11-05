@@ -211,12 +211,12 @@ func initFollower(filename string) (*follower.Follower, error) {
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
 	// If there is no ":Bumper" in the line, do nothing
-	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, " bumper ") {
+	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, "bumper 00 001 001 3") {
 		return
 	}
 
 	// If there is "Curr:(0, 0, 0)" in the line, do nothing (it's a bumper restore info)
-	if strings.Contains(line, "Curr:(0, 0, 0)") {
+	if strings.Contains(line, "Curr:(0, 0, 0)") || strings.Contains(line, "bumper 00 001 001 3 0 0 0") {
 		return
 	}
 
