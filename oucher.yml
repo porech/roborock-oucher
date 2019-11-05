@@ -1,3 +1,7 @@
+# If set to false, oucher will do nothing.
+# - default: true
+enabled: true
+
 # Set the language of the pronounced phrases.
 # - default: "en"
 language: "en"

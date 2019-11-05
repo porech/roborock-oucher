@@ -31,6 +31,7 @@ type phrase struct {
 }
 
 type configuration struct {
+	Enabled    bool     `mapstructure:enabled`
 	Language   string   `mapstructure:language`
 	Volume     int      `mapstructure:volume`
 	SoundsPath string   `mapstructure:soundsPath`
@@ -70,6 +71,15 @@ func main() {
 
 	// Set the log level
 	setLogLevel(config.LogLevel)
+
+	// If disabled, just sleep
+	if !config.Enabled {
+		log.Debug("Disabled, waiting forever")
+		for {
+			time.Sleep(time.Minute)
+		}
+		return
+	}
 
 	// Initialize the phrases array
 	var phrases []phrase
