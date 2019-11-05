@@ -46,6 +46,7 @@ func main() {
 	rand.Seed(time.Now().Unix())
 
 	// Set default configuration
+	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/usr/lib/oucher/sounds")
 	viper.SetDefault("logPath", "/run/shm/NAV_normal.log")
 	viper.SetDefault("language", "en")
