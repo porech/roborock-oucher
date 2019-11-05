@@ -20,6 +20,7 @@ First of all, you need to have a rooted Roborock. Please refer to [this wiki pag
 Download the `oucher` and `oucher.conf` files from this repository, or just clone the entire repo.
 
 Then:
+- If you already had a previous version, stop the oucher service: `service oucher stop`
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy `oucher.conf` to the Roborock, in `/etc/init`
 - Log into SSH to the device
@@ -27,21 +28,24 @@ Then:
 - Start the service: `service oucher start` (or just reboot the device)
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
-```
+```bash
+ssh root@192.168.1.33 service oucher stop
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
-ssh root@192.168.1.33 apt-get update
-ssh root@192.168.1.33 apt-get install espeak alsa-utils
-ssh root@192.168.1.33 apt-get clean
+ssh root@192.168.1.33 apt-get -y update
+ssh root@192.168.1.33 apt-get -y install espeak alsa-utils
+ssh root@192.168.1.33 apt-get -y clean
 ssh root@192.168.1.33 service oucher start
 ```
 Just replace `192.168.1.33` with your Roborock IP.
+
+If you're installing for the first time, the first command will return an error. That's normal, don't worry about it.
 
 Done! Just start a clean and wait for the first bump ;)
 
 ## Can I customize the phrases?
 Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `/etc` folder. From a shell:
-```
+```bash
 scp oucher.yml root@192.168.1.33:/etc
 ```
 Just replace `192.168.1.33` with your Roborock IP.
@@ -51,7 +55,7 @@ Yes! You can create the /usr/lib/oucher/sounds folder (`mkdir -p /usr/lib/oucher
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
 
 The phrase will be chosen randomly on every bump, from the textual or WAV ones. If you want to use WAV files only, set the phrases to an empty array in the config file:
-```
+```yaml
 phrases: []
 ```
 
