@@ -46,13 +46,16 @@ If you're installing for the first time, the first command will return an error.
 Done! Just start a clean and wait for the first bump ;)
 
 ## Can I customize the phrases?
-Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `/etc` folder. From a shell:
+Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `/mnt/data/oucher` folder (you'll need to create it). From a shell:
 ```bash
-scp oucher.yml root@192.168.1.33:/etc
+ssh root@192.168.1.33 mkdir /mnt/data/oucher
+scp oucher.yml root@192.168.1.33:/mnt/data/oucher
 ```
 Just replace `192.168.1.33` with your Roborock IP.
 
 Remember to restart the service with `service oucher restart` each time you make changes to the configuration, because the file is read on startup only.
+
+NB: the configuration file is also read from the /etc folder, like in previous versions, so you don't need to move it if you're upgrading Oucher. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see below).
 
 ## Can I use real screams?
 Yes! You can create the /mnt/data/oucher/sounds folder (`mkdir -p /mnt/data/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
@@ -70,10 +73,15 @@ To avoid copyright issues, we're not going to put WAV files here in the repo at 
 ## It's quite annoying...
 You can set a delay in the configuration file. This way, the software will make sure that, after a scream is played, another one won't be played in the next N seconds. Set, for example, `delay: 10` and it will feel much better!
 
+## What happens on a firmware upgrade?
+A firmware upgrade will remove Oucher along with its dependencies and the root access. However, the `/mnt/data/oucher` folder is not deleted, so your configuration and custom sounds (if you put them here) are safe. You can root the device again and install Oucher back following the setup procedure above. Everything will work as before.
+
+However, if you spent hours looking for the perfect sounds and phrases, we **strongly** recommend you to backup the config and WAV files, so you won't have to worry if for some reason you need to perform a factory reset.
+
 ## How can I remove it?
 If you just want to disable the software but be able to enable it back easily, you can just set `enabled: false` in the configuration. This way, the software does absolutely nothing: after loading the configuration, it just sleeps, without reading the log file or anything else.
 
-If you want to totally remove the software, just delete the `/usr/local/bin/oucher`and `/etc/init/oucher.conf` files. If you uploaded a custom configuration, also delete `/etc/oucher.yml`. If you uploaded custom sounds, also remove the `/usr/lib/oucher`folder.  
+If you want to totally remove the software, just delete the `/usr/local/bin/oucher`and `/etc/init/oucher.conf` files. If you have a custom configuration, or custom sounds, also remove the `/mnt/data/oucher` folder.  
 You won't also need espeak and alsa-utils anymore, so you can remove them with `apt-get remove espeak alsa-utils` followed by an `apt-get autoremove` to uninstall their dependencies.
 
 From the shell:
@@ -97,7 +105,7 @@ Of course! Short-term plans are:
 Anyway, we're sure you can get a great amount of fun with what already exists ;)
 
 ## I tried this and now my robot doesn't work! Shame on you!
-Sorry for your loss :)  
+Sorry for your loss :)
 Seriously: we're pretty confident it's not an issue with our software, since it really doesn't touch anything on the system.
 Most probably, you had some trouble with the root procedure. It's really hard to brick a Roborock, so maybe you'll find a solution if you search carefully on the dedicated channels. As said above, we're not giving support about the root procedure.
 

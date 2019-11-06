@@ -57,6 +57,7 @@ func main() {
 	// Load the configuration file
 	viper.SetConfigName("oucher")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("/mnt/data/oucher")
 	viper.AddConfigPath("/etc")
 	viper.SetConfigType("yml")
 
