@@ -1,3 +1,3 @@
 #!/bin/sh
 
-GOOS=linux GOARCH=arm go build -o ../oucher ./oucher.go
+GOOS=linux GOARCH=arm go build -ldflags="-s -w" -o ../oucher ./oucher.go
