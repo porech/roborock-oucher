@@ -55,8 +55,6 @@ Just replace `192.168.1.33` with your Roborock IP.
 
 Remember to restart the service with `service oucher restart` each time you make changes to the configuration, because the file is read on startup only.
 
-NB: the configuration file is also read from the /etc folder, like in previous versions, so you don't need to move it if you're upgrading Oucher. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see below).
-
 ## Can I use real screams?
 Yes! You can create the /mnt/data/oucher/sounds folder (`mkdir -p /mnt/data/oucher/sounds`) and put some WAV files in there (no MP3, just WAV).  
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
@@ -87,15 +85,17 @@ You won't also need espeak and alsa-utils anymore, so you can remove them with `
 From the shell:
 ```bash
 ssh root@192.168.1.33 rm /usr/local/bin/oucher /etc/init/oucher.conf
-ssh root@192.168.1.33 rm /etc/oucher.yml
-ssh root@192.168.1.33 rm -r /usr/lib/oucher
+ssh root@192.168.1.33 rm -r /mnt/data/oucher
 ssh root@192.168.1.33 apt-get remove espeak alsa-utils
 ssh root@192.168.1.33 apt-get autoremove
 ```
 Just replace `192.168.1.33` with your Roborock IP.
 
 ## How does it work?
-The Roborock service logs everything that happens while cleaning in a file: `/run/shm/NAV_normal.log`. This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay`, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
+The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log`. This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay` for text-to-speech, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
+
+## I used an old version that looked for the oucher.yml file in /etc. Do I need to move it?
+You're not forced to move it: the configuration file is also looked up from the /etc folder, like in previous versions. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see above).
 
 ## Are you planning to improve it?
 Of course! Short-term plans are:
