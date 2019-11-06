@@ -48,7 +48,7 @@ func main() {
 	// Set default configuration
 	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
-	viper.SetDefault("logPaths", []string{"/run/shm/NAV_normal.log", "/run/shm/PLAYER_fprintf.log"})
+	viper.SetDefault("logPaths", []string{"/run/shm/PLAYER_fprintf.log"})
 	viper.SetDefault("language", "en")
 	viper.SetDefault("volume", 100)
 	viper.SetDefault("phrases", []string{"Ouch!", "Argh!", "Hey, it hurts!"})
@@ -210,13 +210,13 @@ func initFollower(filename string) (*follower.Follower, error) {
 // Process a single line
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
-	// If there is no ":Bumper" in the line, do nothing
-	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, "bumper 00 001 001 3") {
+	// If there is no "bumper 00 001 001 3" in the line, do nothing
+	if !strings.Contains(line, "bumper 00 001 001 3") {
 		return
 	}
 
-	// If there is "Curr:(0, 0, 0)" in the line, do nothing (it's a bumper restore info)
-	if strings.Contains(line, "Curr:(0, 0, 0)") || strings.Contains(line, "bumper 00 001 001 3 0 0 0") {
+	// If there is "bumper 00 001 001 3 0 0 0" in the line, do nothing (it's a bumper restore info)
+	if strings.Contains(line, "bumper 00 001 001 3 0 0 0") {
 		return
 	}
 
