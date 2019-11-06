@@ -229,6 +229,12 @@ func processLine(line string, phrases []phrase, config *configuration) {
 		return
 	}
 
+	// If the voices set is empty, do nothing
+	if len(phrases) == 0 {
+		log.Warn("No phrases or sounds!")
+		return
+	}
+
 	// Set the ouching semaphore as true
 	IsOuching = true
 
