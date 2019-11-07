@@ -26,7 +26,7 @@ Then:
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy `oucher.conf` to the Roborock, in `/etc/init`
 - Log into SSH to the device
-- Install espeak and alsa-utils: `apt-get update && apt-get install espeak alsa-utils && apt-get clean`
+- Install espeak, sox and alsa-utils: `apt-get update && apt-get install espeak sox alsa-utils && apt-get clean`
 - Start the service: `service oucher start` (or just reboot the device)
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
@@ -35,7 +35,7 @@ ssh root@192.168.1.33 service oucher stop
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
 ssh root@192.168.1.33 apt-get -y update
-ssh root@192.168.1.33 apt-get -y install espeak alsa-utils
+ssh root@192.168.1.33 apt-get -y install espeak sox alsa-utils
 ssh root@192.168.1.33 apt-get -y clean
 ssh root@192.168.1.33 service oucher start
 ```
@@ -80,13 +80,13 @@ However, if you spent hours looking for the perfect sounds and phrases, we **str
 If you just want to disable the software but be able to enable it back easily, you can just set `enabled: false` in the configuration. This way, the software does absolutely nothing: after loading the configuration, it just sleeps, without reading the log file or anything else.
 
 If you want to totally remove the software, just delete the `/usr/local/bin/oucher`and `/etc/init/oucher.conf` files. If you have a custom configuration, or custom sounds, also remove the `/mnt/data/oucher` folder.  
-You won't also need espeak and alsa-utils anymore, so you can remove them with `apt-get remove espeak alsa-utils` followed by an `apt-get autoremove` to uninstall their dependencies.
+You won't also need espeak, sox and alsa-utils anymore, so you can remove them with `apt-get remove espeak sox alsa-utils` followed by an `apt-get autoremove` to uninstall their dependencies.
 
 From the shell:
 ```bash
 ssh root@192.168.1.33 rm /usr/local/bin/oucher /etc/init/oucher.conf
 ssh root@192.168.1.33 rm -r /mnt/data/oucher
-ssh root@192.168.1.33 apt-get remove espeak alsa-utils
+ssh root@192.168.1.33 apt-get remove espeak sox alsa-utils
 ssh root@192.168.1.33 apt-get autoremove
 ```
 Just replace `192.168.1.33` with your Roborock IP.

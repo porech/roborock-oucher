@@ -7,8 +7,7 @@ enabled: true
 language: "en"
 
 # Set the volume of the pronounced phrases from 0 to 100.
-# Please note that this only works for text-to-speech phrases, and not for WAV files (for now).
-# WAV files are always played at full volume, so make sure to process the file itself to match what you want.
+# If you don't have sox installed, this will apply to text-to-speech phrases only.
 # - default: 100
 volume: 100
 

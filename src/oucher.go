@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/papertrail/go-tail/follower"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -11,7 +12,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -39,6 +39,7 @@ type configuration struct {
 	LogLevel   string   `mapstructure:logLevel`
 	Phrases    []string `mapstructure:phrases`
 	Delay      int      `mapstructure:delay`
+	UseSox     bool
 }
 
 func main() {
@@ -113,6 +114,26 @@ func main() {
 				}
 				phrases = append(phrases, newPhrase)
 			}
+		}
+	}
+
+	// Perform some checks on the configuration
+	if config.Volume > 100 {
+		log.Warn("Volume is more than 100, setting in to 100")
+		config.Volume = 100
+	}
+	if config.Volume < 0 {
+		log.Warn("Volume is less than 0, setting it to 0")
+		config.Volume = 0
+	}
+
+	// If volume is less then 100, check if Sox exists
+	config.UseSox = false
+	if config.Volume < 100 {
+		if cmdExists("sox") {
+			config.UseSox = true
+		} else {
+			log.Warn("Volume is less than 100 but sox is not installed, WAV files will play at full volume!")
 		}
 	}
 
@@ -198,6 +219,12 @@ func dirExists(dirname string) bool {
 	return info.IsDir()
 }
 
+// Check if a command exists
+func cmdExists(cmd string) bool {
+	_, err := exec.LookPath(cmd)
+	return err == nil
+}
+
 // Initialize the follower with the required parameters
 func initFollower(filename string) (*follower.Follower, error) {
 	t, err := follower.New(filename, follower.Config{
@@ -250,7 +277,11 @@ func ouch(phrases []phrase, config *configuration) {
 	if sayPhrase.Type == Text {
 		eSpeak(sayPhrase.Text, config.Language, config.Volume)
 	} else {
-		aPlay(sayPhrase.Text)
+		if config.UseSox {
+			soxaPlay(sayPhrase.Text, config.Volume)
+		} else {
+			aPlay(sayPhrase.Text)
+		}
 	}
 
 	// If there is a delay set, wait before resetting the semaphore
@@ -262,10 +293,12 @@ func ouch(phrases []phrase, config *configuration) {
 	IsOuching = false
 }
 
-// Invoke the espeak command, piping it with aplay, and set the ouching semaphore to false after it finishes
+// Invoke the espeak command, piping it with aplay
 func eSpeak(phrase, language string, volume int) {
-	espeakCmd := exec.Command("espeak", "--stdout", "-a", strconv.Itoa(volume*2), "-v", language, phrase)
+	espeakCmd := exec.Command("espeak", "--stdout", "-a", fmt.Sprintf("%d", volume*2), "-v", language, phrase)
 	aplayCmd := exec.Command("aplay", "-")
+	log.Debugf("espeak command: %s", espeakCmd.String())
+	log.Debugf("aplay command: %s", aplayCmd.String())
 	r, w := io.Pipe()
 	espeakCmd.Stdout = w
 	aplayCmd.Stdin = r
@@ -279,12 +312,33 @@ func eSpeak(phrase, language string, volume int) {
 	w.Close()
 	aplayCmd.Wait()
 	io.Copy(os.Stdout, &b2)
-
 }
 
-// Invoke the aplay command, and set the ouching semaphore to false after it finishes
+// Invoke the sox command, piping it with aplay
+func soxaPlay(file string, volume int) {
+	soxCmd := exec.Command("sox", "-v", fmt.Sprintf("%.2f", float32(volume)/100), file, "-t", "wav", "-")
+	aplayCmd := exec.Command("aplay", "-")
+	log.Debugf("sox command: %s", soxCmd.String())
+	log.Debugf("aplay command: %s", aplayCmd.String())
+	r, w := io.Pipe()
+	soxCmd.Stdout = w
+	aplayCmd.Stdin = r
+
+	var b2 bytes.Buffer
+	aplayCmd.Stdout = &b2
+
+	soxCmd.Start()
+	aplayCmd.Start()
+	soxCmd.Wait()
+	w.Close()
+	aplayCmd.Wait()
+	io.Copy(os.Stdout, &b2)
+}
+
+// Invoke the aplay command
 func aPlay(file string) {
 	aplayCmd := exec.Command("aplay", file)
+	log.Debugf("aplay command: %s", aplayCmd.String())
 	var b bytes.Buffer
 	aplayCmd.Stdout = &b
 
