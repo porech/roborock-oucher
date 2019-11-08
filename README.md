@@ -66,7 +66,7 @@ phrases: []
 
 Remember to restart the service with `service oucher restart` each time you add or remove a WAV file, because the list is loaded on startup only.
 
-To avoid copyright issues, we're not going to put WAV files here in the repo at the moment. Anyway, you can find something useful [on this page](https://www.shockwave-sound.com/free-sound-effects/scream-sounds).
+We're grouping some funny sound packs [on this page](http://www.linuxzogno.org/oucher-sounds/): they're made by Oucher users with samples found on the Internet. If you own copyright for some of the files and you don't like them to be there, please open an issue and we'll remove them.
 
 ## It's quite annoying...
 You can set a delay in the configuration file. This way, the software will make sure that, after a scream is played, another one won't be played in the next N seconds. Set, for example, `delay: 10` and it will feel much better!
