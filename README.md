@@ -111,3 +111,6 @@ Most probably, you had some trouble with the root procedure. It's really hard to
 
 ## I followed the procedure but the robot doesn't ouch
 In this case, we're really happy to help! Just open an issue about it with as many details as you can, and we'll sort it out.
+
+## I love it, can I offer you a coffee?
+Wow, thanks! You can drop some Bitcoin to 35J2dPDFHweeB87LiYcHbhVmtgBsNrP4eH
