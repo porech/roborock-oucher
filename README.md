@@ -92,7 +92,7 @@ ssh root@192.168.1.33 apt-get autoremove
 Just replace `192.168.1.33` with your Roborock IP.
 
 ## How does it work?
-The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log`. This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay` for text-to-speech, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
+The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log` (or other files, depending on the model and firmware version). This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay` for text-to-speech, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
 
 ## I used an old version that looked for the oucher.yml file in /etc. Do I need to move it?
 You're not forced to move it: the configuration file is also looked up from the /etc folder, like in previous versions. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see above).
@@ -109,8 +109,11 @@ Sorry for your loss :)
 Seriously: we're pretty confident it's not an issue with our software, since it really doesn't touch anything on the system.
 Most probably, you had some trouble with the root procedure. It's really hard to brick a Roborock, so maybe you'll find a solution if you search carefully on the dedicated channels. As said above, we're not giving support about the root procedure.
 
-## I followed the procedure but the robot doesn't ouch
-In this case, we're really happy to help! Just open an issue about it with as many details as you can, and we'll sort it out.
+## I followed the procedure but the robot doesn't ouch / ouches at the wrong moment / woke me up at 3am by screaming for no reason
+In this case, we're really happy to help! Just open an issue about it with as many details as you can, and we'll sort it out. If you can, please copy the following files from the robot immediately after the unexpected behaviour occurrs, and attach them to the issue:
+- /run/shm/PLAYER_fprintf.log
+- /run/shm/NAV_normal.log
+- /run/shm/NAV_TRAP_normal.log
 
 ## I love it, can I offer you a coffee?
 Wow, thanks! You can drop some Bitcoin to 35J2dPDFHweeB87LiYcHbhVmtgBsNrP4eH
