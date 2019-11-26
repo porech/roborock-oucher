@@ -115,5 +115,5 @@ In this case, we're really happy to help! Just open an issue about it with as ma
 - /run/shm/NAV_normal.log
 - /run/shm/NAV_TRAP_normal.log
 
-## I love it, can I offer you a coffee?
+## I love it, can I offer you a beer?
 Wow, thanks! You can drop some Bitcoin to 35J2dPDFHweeB87LiYcHbhVmtgBsNrP4eH
