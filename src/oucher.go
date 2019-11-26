@@ -267,6 +267,7 @@ func processLine(line string, phrases []phrase, config *configuration) {
 	// If there is already an ouch in progress, do nothing
 	if IsOuching {
 		log.Debug("Already ouching, doing nothing")
+		ouchingMutex.Unlock()
 		return
 	}
 
@@ -301,7 +302,9 @@ func ouch(phrases []phrase, config *configuration) {
 	}
 
 	// Unset the ouching semaphore
+	ouchingMutex.Lock()
 	IsOuching = false
+	ouchingMutex.Unlock()
 }
 
 // Invoke the espeak command, piping it with aplay
