@@ -26,6 +26,7 @@ Then:
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy `oucher.conf` to the Roborock, in `/etc/init`
 - Log into SSH to the device
+- Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
 - Install espeak, sox and alsa-utils: `apt-get update && apt-get install espeak sox alsa-utils && apt-get clean`
 - Start the service: `service oucher start` (or just reboot the device)
 
@@ -34,6 +35,7 @@ All of this can be executed from the shell, in the folder where you downloaded t
 ssh root@192.168.1.33 service oucher stop
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
+ssh root@192.168.1.33 chmod +x /usr/local/bin/oucher
 ssh root@192.168.1.33 apt-get -y update
 ssh root@192.168.1.33 apt-get -y install espeak sox alsa-utils
 ssh root@192.168.1.33 apt-get -y clean
