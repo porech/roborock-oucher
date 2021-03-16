@@ -26,6 +26,7 @@ Then:
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy `oucher.conf` to the Roborock, in `/etc/init`
 - Log into SSH to the device
+- If you're using a recent firmware version, edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot
 - Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
 - Install espeak, sox and alsa-utils: `apt-get update && apt-get install espeak sox alsa-utils && apt-get clean`
 - Start the service: `service oucher start` (or just reboot the device)
@@ -46,6 +47,12 @@ Just replace `192.168.1.33` with your Roborock IP.
 If you're installing for the first time, the first command will return an error. That's normal, don't worry about it.
 
 Done! Just start a clean and wait for the first bump ;)
+
+## How can I build the executable by myself?
+Just clone the repo, go into the `src` directory and run `./build.sh`. It will create the `oucher` file in the base project directory.
+
+## It isn't working anymore on the latest firmware
+Please ensure you're using the latest binary available on the repository, and that you've set LOG_LEVEL to 8 in the `/opt/rockrobo/rrlog/rrlog.conf` file.
 
 ## Can I customize the phrases?
 Sure! Just customize the `oucher.yml` file and copy it to the Roborock, in the `/mnt/data/oucher` folder (you'll need to create it). From a shell:
