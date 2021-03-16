@@ -244,7 +244,7 @@ func initFollower(filename string) (*follower.Follower, error) {
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
 	// If there is no ":Bumper" or "bumper 00 001 001 3" in the line, do nothing
-	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, "bumper 00 001 001 3") {
+	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, "bumper 00 001 001 3") && !strings.Contains(line, ": Bumper") {
 		return
 	}
 
