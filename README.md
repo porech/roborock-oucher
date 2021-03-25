@@ -51,7 +51,10 @@ Done! Just start a clean and wait for the first bump ;)
 
 ## I'm on a newer/custom firmware without apt, how can I install the dependencies?
 The awesome guys at the [dustcloud project](https://github.com/dgiese/dustcloud) put together all the needed binary dependencies in a single tgz file, which you can find in this repo as `oucher_deps.tgz`.
-You should be fine by just copying it to the robot and uncompress it in the root folder: `tar xfv oucher_deps.tgz -C /`
+You should be fine by just copying it to the robot and uncompress it in the root folder:
+```bash
+tar xfv oucher_deps.tgz -C /
+```
 
 ## How can I build the executable by myself?
 Just clone the repo, go into the `src` directory and run `./build.sh`. It will create the `oucher` file in the base project directory.
