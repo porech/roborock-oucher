@@ -2,7 +2,7 @@
 ![Roborock Oucher logo](https://i.ibb.co/5K16Hxr/oucher.jpg)
 
 ## What is it?
-Some time ago, Michael Reeves made [a video that went viral](https://www.youtube.com/watch?v=mvz3LRK263E), with a Roomba that was modded to scream when it hurts an obstacle. Michael removed many components from the Roomba, and that made the robot really funny but totally useless.
+Some time ago, Michael Reeves made [a video that went viral](https://www.youtube.com/watch?v=mvz3LRK263E), with a Roomba that was modded to scream when it hits an obstacle. Michael removed many components from the Roomba, and that made the robot really funny but totally useless.
 
 However, the Roborock, better known as Xiaomi Mi Vacuum Cleaner, already has all the components it needs to get the same result without any hardware modification, and without loosing any native functionality. So, we made up a Golang application that can be used on a rooted Roborock cleaner.
 
