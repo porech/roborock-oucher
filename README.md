@@ -49,6 +49,9 @@ If you're installing for the first time, the first command will return an error.
 
 Done! Just start a clean and wait for the first bump ;)
 
+## The instructions above are not clear for me
+There is [a very well written tutorial](https://arner.github.io/posts/#install-the-oucher) by [Arner](https://arner.github.io/) you can follow. However I think that if you succeeded in rooting the device, that is the hard part, installing Oucher will be child's play!
+
 ## I'm on a newer/custom firmware without apt, how can I install the dependencies?
 The awesome guys at the [dustcloud project](https://github.com/dgiese/dustcloud) put together all the needed binary dependencies in a single tgz file, which you can find in this repo as `oucher_deps.tgz`.
 You should be fine by just copying it to the robot and uncompress it in the root folder:
