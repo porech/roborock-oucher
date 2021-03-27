@@ -49,7 +49,7 @@ If you're installing for the first time, the first command will return an error.
 
 Done! Just start a clean and wait for the first bump ;)
 
-## The instructions above are not clear for me
+## The instructions above are not clear for me.
 There is [a very well written tutorial](https://arner.github.io/posts/#install-the-oucher) by [Arner](https://arner.github.io/) you can follow. However I think that if you succeeded in rooting the device, that is the hard part, installing Oucher will be child's play!
 
 ## I'm on a newer/custom firmware without apt, how can I install the dependencies?
@@ -70,7 +70,7 @@ Just replace `192.168.1.33` with your Roborock IP.
 ## How can I build the executable by myself?
 Just clone the repo, go into the `src` directory and run `./build.sh`. It will create the `oucher` file in the base project directory.
 
-## It isn't working anymore on the latest firmware
+## It isn't working anymore on the latest firmware.
 Please ensure you're using the latest binary available on the repository, and that you've set LOG_LEVEL to 8 in the `/opt/rockrobo/rrlog/rrlog.conf` file.
 
 ## Can I customize the phrases?
@@ -137,7 +137,7 @@ Sorry for your loss :)
 Seriously: we're pretty confident it's not an issue with our software, since it really doesn't touch anything on the system.
 Most probably, you had some trouble with the root procedure. It's really hard to brick a Roborock, so maybe you'll find a solution if you search carefully on the dedicated channels. As said above, we're not giving support about the root procedure.
 
-## I followed the procedure but the robot doesn't ouch / ouches at the wrong moment / woke me up at 3am by screaming for no reason
+## I followed the procedure but the robot doesn't ouch / ouches at the wrong moment / woke me up at 3am by screaming for no reason.
 In this case, we're really happy to help! Just open an issue about it with as many details as you can, and we'll sort it out. If you can, please copy the following files from the robot immediately after the unexpected behaviour occurrs, and attach them to the issue:
 - /run/shm/PLAYER_fprintf.log
 - /run/shm/NAV_normal.log
