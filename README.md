@@ -20,12 +20,12 @@ In all of this README I will talk about "Roborock" to mention the robot. This is
 ## How do I install this?
 First of all, you need to have a rooted Roborock. Please refer to [this wiki page](https://github.com/dgiese/dustcloud/wiki/VacuumRobots-manual-update-root-Howto) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
 
-Download the `oucher` and `oucher.conf` files from this repository, or just clone the entire repo.
+Download the `oucher`, `oucher.conf` and `S12oucher` files from this repository, or just clone the entire repo.
 
 Then:
 - If you already had a previous version, stop the oucher service: `service oucher stop`
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
-- Copy `oucher.conf` to the Roborock, in `/etc/init`
+- Copy the startupt script to the Roborock, in `/etc/init`. On the most recent models and firmware versions, the right startup script is `S12oucher`, while  on the other ones it's `oucher.conf`. Only one of them will work, the other one will be ignored, so if you're in doubt try one and then the other, or just copy both of them, it won't cause any damage.
 - Log into SSH to the device
 - If you're using a recent firmware version, edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot
 - Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
@@ -37,6 +37,7 @@ All of this can be executed from the shell, in the folder where you downloaded t
 ssh root@192.168.1.33 service oucher stop
 scp oucher root@192.168.1.33:/usr/local/bin
 scp oucher.conf root@192.168.1.33:/etc/init
+scp S12oucher root@192.168.1.33:/etc/init
 ssh root@192.168.1.33 chmod +x /usr/local/bin/oucher
 ssh root@192.168.1.33 apt-get -y update
 ssh root@192.168.1.33 apt-get -y install espeak sox alsa-utils
@@ -145,3 +146,10 @@ In this case, we're really happy to help! Just open an issue about it with as ma
 
 ## I love it, can I offer you a beer?
 Wow, thanks! You can drop some Bitcoin to 35J2dPDFHweeB87LiYcHbhVmtgBsNrP4eH
+
+## Credits
+- The [dustcloud project](https://github.com/dgiese/dustcloud) for all the work on rooting the devices and documenting the procedure, nothing of this would be possible without their work.
+- [ZVLDZ](https://github.com/zvldz/vacuum) for having added Oucher to his firmware builder, and for making those well-made startup scripts I included here.
+- Everyone who provided feedback on his specific model/firmware version, Oucher has improved a lot thanks to this.
+
+Did I forget to mention you? Sorry! Just open a issue :)

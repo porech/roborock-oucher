@@ -1,0 +1,28 @@
+#!/bin/sh
+
+load() {
+    curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
+    echo "[$curtime] start oucher"
+    start-stop-daemon -S -b -q -m -p /var/run/oucher.pid -x /usr/local/bin/oucher
+}
+
+unload() {
+    echo "Stopping oucher" >/dev/kmsg
+    start-stop-daemon -K -q -p /var/run/oucher.pid
+}
+
+case "$1" in
+    start)
+        load
+        ;;
+    stop)
+        unload
+        ;;
+    restart)
+        unload
+        load
+        ;;
+    *)
+        echo "$0 <start/stop/restart>"
+        ;;
+esac
