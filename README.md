@@ -33,7 +33,7 @@ Then:
 - Reboot the device
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
-```bash
+```
 export IP=192.168.1.33
 ssh root@$IP service oucher stop
 scp oucher root@$IP:/usr/local/bin
