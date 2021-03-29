@@ -63,12 +63,13 @@ tar xfv oucher_deps.tgz -C /
 ```
 
 You can do this from your shell, in the folder where you downloaded the `oucher_deps.tgz` file:
-```bash
-scp oucher_deps.tgz root@192.168.1.33:/root
-ssh root@192.168.1.33 tar xfv /root/oucher_deps.tgz -C /
-ssh root@192.168.1.33 rm /root/oucher_deps.tgz
 ```
-Just replace `192.168.1.33` with your Roborock IP.
+export IP=192.168.1.33
+scp oucher_deps.tgz root@$IP:/root
+ssh root@$IP tar xfv /root/oucher_deps.tgz -C /
+ssh root@$IP rm /root/oucher_deps.tgz
+```
+Just replace `192.168.1.33` in the first command with your Roborock IP.
 
 ## How can I build the executable by myself?
 Just clone the repo, go into the `src` directory and run `./build.sh`. It will create the `oucher` file in the base project directory.
