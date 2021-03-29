@@ -30,23 +30,25 @@ Then:
 - If you're using a recent firmware version, edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot
 - Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
 - Install espeak, sox and alsa-utils: `apt-get update && apt-get install espeak sox alsa-utils && apt-get clean`
-- Start the service: `service oucher start` (or just reboot the device)
+- Reboot the device
 
 All of this can be executed from the shell, in the folder where you downloaded the files:
 ```bash
-ssh root@192.168.1.33 service oucher stop
-scp oucher root@192.168.1.33:/usr/local/bin
-scp oucher.conf root@192.168.1.33:/etc/init
-scp S12oucher root@192.168.1.33:/etc/init
-ssh root@192.168.1.33 chmod +x /usr/local/bin/oucher
-ssh root@192.168.1.33 apt-get -y update
-ssh root@192.168.1.33 apt-get -y install espeak sox alsa-utils
-ssh root@192.168.1.33 apt-get -y clean
-ssh root@192.168.1.33 service oucher start
+export IP=192.168.1.33
+ssh root@$IP service oucher stop
+scp oucher root@$IP:/usr/local/bin
+scp oucher.conf root@$IP:/etc/init
+scp S12oucher root@$IP:/etc/init
+ssh root@$IP chmod +x /usr/local/bin/oucher
+ssh root@$IP sed -i -r 's/LOG_LEVEL=[0-9]*/LOG_LEVEL=8/' /opt/rockrobo/rrlog/rrlog.conf
+ssh root@$IP apt-get -y update
+ssh root@$IP apt-get -y install espeak sox alsa-utils
+ssh root@$IP apt-get -y clean
+ssh root@$IP reboot
 ```
-Just replace `192.168.1.33` with your Roborock IP.
+Just replace `192.168.1.33` in the first command with your Roborock IP.
 
-If you're installing for the first time, the first command will return an error. That's normal, don't worry about it.
+Depending on your model, some of the commands may return errors. Just don't worry and go on with the next one.
 
 Done! Just start a clean and wait for the first bump ;)
 
