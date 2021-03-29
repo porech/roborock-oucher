@@ -13,7 +13,7 @@ It has been tested on:
 - Roborock S5
 - Roborock S6
 
-It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is just that it doesn't work. The screams, not the robot ;)
+It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is that it doesn't work. The screams, not the robot ;)
 
 In all of this README I will talk about "Roborock" to mention the robot. This is just for simplicity: the instructions apply to all the compatible models.
 
@@ -48,7 +48,7 @@ ssh root@$IP reboot
 ```
 Just replace `192.168.1.33` in the first command with your Roborock IP.
 
-Depending on your model, some of the commands may return errors. Just don't worry and go on with the next one.
+Depending on your model, some of the commands may return errors. Don't worry and go on with the next one.
 
 Done! Just start a clean and wait for the first bump ;)
 
