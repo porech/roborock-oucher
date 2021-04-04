@@ -1,8 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"github.com/faiface/beep"
+	"github.com/faiface/beep/effects"
+	"github.com/faiface/beep/speaker"
+	"github.com/faiface/beep/wav"
 	"github.com/papertrail/go-tail/follower"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -17,14 +20,13 @@ import (
 	"time"
 )
 
-var IsOuching bool = false
+var IsOuching = false
 var ouchingMutex *sync.Mutex
 
 type PhraseType int
 
 const (
-	Text PhraseType = iota
-	Wav
+	Wav PhraseType = iota
 )
 
 type phrase struct {
@@ -33,15 +35,14 @@ type phrase struct {
 }
 
 type configuration struct {
-	Enabled    bool     `mapstructure:enabled`
-	Language   string   `mapstructure:language`
-	Volume     int      `mapstructure:volume`
-	SoundsPath string   `mapstructure:soundsPath`
-	LogPaths   []string `mapstructure:logPaths`
-	LogLevel   string   `mapstructure:logLevel`
-	Phrases    []string `mapstructure:phrases`
-	Delay      int      `mapstructure:delay`
-	UseSox     bool
+	Enabled    bool     `mapstructure:"enabled"`
+	Volume     int      `mapstructure:"volume"`
+	SoundsPath string   `mapstructure:"soundsPath"`
+	LogPaths   []string `mapstructure:"logPaths"`
+	LogLevel   string   `mapstructure:"logLevel"`
+	Delay      int      `mapstructure:"delay"`
+
+	OuchOnStart bool `mapstructure:"ouchOnStart"`
 }
 
 func main() {
@@ -55,9 +56,7 @@ func main() {
 	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
 	viper.SetDefault("logPaths", []string{"/run/shm/PLAYER_fprintf.log", "/run/shm/NAV_normal.log", "/run/shm/NAV_TRAP_normal.log"})
-	viper.SetDefault("language", "en")
 	viper.SetDefault("volume", 100)
-	viper.SetDefault("phrases", []string{"Ouch!", "Argh!", "Hey, it hurts!"})
 	viper.SetDefault("logLevel", "info")
 
 	// Load the configuration file
@@ -89,36 +88,28 @@ func main() {
 		return
 	}
 
-	// Initialize the phrases array
+	// Initialize the phdrases array
 	var phrases []phrase
 
-	// For each phrase, add it to the array
-	for _, txtPhrase := range config.Phrases {
-		log.Debugf("Phrase: %s", txtPhrase)
-		newPhrase := phrase{
-			Text,
-			txtPhrase,
-		}
-		phrases = append(phrases, newPhrase)
+	// Search for wav files in the sounds path and add them to the list
+	if !dirExists(config.SoundsPath) {
+		log.Fatalf("sounds path %s does not exist", config.SoundsPath)
 	}
 
-	// Search for wav files in the sounds path and add them to the list
-	if dirExists(config.SoundsPath) {
-		files, err := ioutil.ReadDir(config.SoundsPath)
-		if err != nil {
-			log.Warn("Can't read sounds directory: ", err)
-		}
+	files, err := ioutil.ReadDir(config.SoundsPath)
+	if err != nil {
+		log.Warn("Can't read sounds directory: ", err)
+	}
 
-		for _, f := range files {
-			if strings.HasSuffix(strings.ToLower(f.Name()), ".wav") {
-				path := filepath.Join(config.SoundsPath, f.Name())
-				log.Debugf("Sound: %s", path)
-				newPhrase := phrase{
-					Wav,
-					path,
-				}
-				phrases = append(phrases, newPhrase)
+	for _, f := range files {
+		if strings.HasSuffix(strings.ToLower(f.Name()), ".wav") {
+			path := filepath.Join(config.SoundsPath, f.Name())
+			log.Debugf("Sound: %s", path)
+			newPhrase := phrase{
+				Wav,
+				path,
 			}
+			phrases = append(phrases, newPhrase)
 		}
 	}
 
@@ -132,14 +123,10 @@ func main() {
 		config.Volume = 0
 	}
 
-	// If volume is less then 100, check if Sox exists
-	config.UseSox = false
-	if config.Volume < 100 {
-		if cmdExists("sox") {
-			config.UseSox = true
-		} else {
-			log.Warn("Volume is less than 100 but sox is not installed, WAV files will play at full volume!")
-		}
+	// If we should ouch on start, do it now
+	if config.OuchOnStart {
+		log.Debugf("Ouch on start is enabled, ouching now")
+		go ouch(phrases, &config)
 	}
 
 	// For each log path, start the watching routine
@@ -285,15 +272,11 @@ func ouch(phrases []phrase, config *configuration) {
 	// Choose a random phrase
 	sayPhrase := phrases[rand.Intn(len(phrases))]
 	log.Debugf("Chosen phrase: %s", sayPhrase.Text)
-	// Say the phrase
-	if sayPhrase.Type == Text {
-		eSpeak(sayPhrase.Text, config.Language, config.Volume)
-	} else {
-		if config.UseSox {
-			soxaPlay(sayPhrase.Text, config.Volume)
-		} else {
-			aPlay(sayPhrase.Text)
-		}
+
+	// Play the file
+	err := playSound(sayPhrase.Text, sayPhrase.Type, config.Volume)
+	if err != nil {
+		log.Errorf("cannot play file %s: %v", sayPhrase.Text, err)
 	}
 
 	// If there is a delay set, wait before resetting the semaphore
@@ -307,56 +290,33 @@ func ouch(phrases []phrase, config *configuration) {
 	ouchingMutex.Unlock()
 }
 
-// Invoke the espeak command, piping it with aplay
-func eSpeak(phrase, language string, volume int) {
-	espeakCmd := exec.Command("espeak", "--stdout", "-a", fmt.Sprintf("%d", volume*2), "-v", language, phrase)
-	aplayCmd := exec.Command("aplay", "-")
-	log.Debugf("espeak command: %s", espeakCmd.String())
-	log.Debugf("aplay command: %s", aplayCmd.String())
-	r, w := io.Pipe()
-	espeakCmd.Stdout = w
-	aplayCmd.Stdin = r
-
-	var b2 bytes.Buffer
-	aplayCmd.Stdout = &b2
-
-	espeakCmd.Start()
-	aplayCmd.Start()
-	espeakCmd.Wait()
-	w.Close()
-	aplayCmd.Wait()
-	io.Copy(os.Stdout, &b2)
-}
-
-// Invoke the sox command, piping it with aplay
-func soxaPlay(file string, volume int) {
-	soxCmd := exec.Command("sox", "-v", fmt.Sprintf("%.2f", float32(volume)/100), file, "-t", "wav", "-")
-	aplayCmd := exec.Command("aplay", "-")
-	log.Debugf("sox command: %s", soxCmd.String())
-	log.Debugf("aplay command: %s", aplayCmd.String())
-	r, w := io.Pipe()
-	soxCmd.Stdout = w
-	aplayCmd.Stdin = r
-
-	var b2 bytes.Buffer
-	aplayCmd.Stdout = &b2
-
-	soxCmd.Start()
-	aplayCmd.Start()
-	soxCmd.Wait()
-	w.Close()
-	aplayCmd.Wait()
-	io.Copy(os.Stdout, &b2)
-}
-
-// Invoke the aplay command
-func aPlay(file string) {
-	aplayCmd := exec.Command("aplay", file)
-	log.Debugf("aplay command: %s", aplayCmd.String())
-	var b bytes.Buffer
-	aplayCmd.Stdout = &b
-
-	aplayCmd.Start()
-	aplayCmd.Wait()
-	io.Copy(os.Stdout, &b)
+func playSound(path string, phraseType PhraseType, volume int) error {
+	f, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("cannot open file: %w", err)
+	}
+	streamer, format, err := wav.Decode(f)
+	if err != nil {
+		return fmt.Errorf("cannot decode file: %w", err)
+	}
+	defer streamer.Close()
+	err = speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+	if err != nil {
+		return fmt.Errorf("cannot initialize speaker: %w", err)
+	}
+	defer speaker.Close()
+	done := make(chan bool)
+	log.Debugf("Volume: %d", volume)
+	volumedStreamer := &effects.Volume{
+		Streamer: streamer,
+		Base:     2,
+		Volume:   -5 + (float64(volume) / 20),
+		Silent:   volume == 0,
+	}
+	speaker.Play(beep.Seq(volumedStreamer, beep.Callback(func() {
+		done <- true
+	})))
+	<-done
+	log.Debugf("Finished playing")
+	return nil
 }

@@ -2,12 +2,7 @@
 # - default: true
 enabled: true
 
-# Set the language of the pronounced phrases.
-# - default: "en"
-language: "en"
-
-# Set the volume of the pronounced phrases from 0 to 100.
-# If you don't have sox installed, this will apply to text-to-speech phrases only.
+# Set the volume of the screams from 0 to 100.
 # - default: 100
 volume: 100
 
@@ -16,15 +11,6 @@ volume: 100
 # - default: 0
 delay: 0
 
-# Set the phrases you want to pronounce (there are three default English phrases):
-# If you don't want text-to-speech, but only WAV files, force it to empty like this:
-# phrases: []
-phrases:
-  - "Ouch!"
-  - "Argh!"
-  - "Hey, it hurts!"
-
-# Set the directory where WAV files are stored
-# If the directory doesn't exist, it is ignored.
+# Set the directory where WAV files are stored.
 # - default: "/mnt/data/oucher/sounds"
 soundsPath: "/mnt/data/oucher/sounds"
