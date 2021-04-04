@@ -134,7 +134,7 @@ The Roborock service logs everything that happens while cleaning in a file: `/ru
 ## I used an old version that looked for the oucher.yml file in /etc. Do I need to move it?
 You're not forced to move it: the configuration file is also looked up from the /etc folder, like in previous versions. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see above).
 
-# I used an old version that used a text-to-speech to play phrases, why am I forced to use WAV files now?
+## I used an old version that used a text-to-speech to play phrases, why am I forced to use WAV files now?
 The old version used to require many dependencies (espeak, aplay, sox, ...) that were quite heavy considering the limited disk space, and they were not really trivial to install on some firmwares without APT.  
 The current version now uses the `beep` Golang library, that uses `asound` under the hood. This is statically linked inside the executable, so that there's no need to install any dependency anymore.
 
