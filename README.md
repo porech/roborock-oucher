@@ -52,25 +52,6 @@ Depending on your model, some of the commands may return errors. Don't worry and
 
 Done! Just start a clean and wait for the first bump ;)
 
-## The instructions above are not clear for me.
-There is [a very well written tutorial](https://arner.github.io/posts/#install-the-oucher) by [Arner](https://arner.github.io/) you can follow. However I think that if you succeeded in rooting the device, that is the hard part, installing Oucher will be child's play!
-
-## I'm on a newer/custom firmware without apt, how can I install the dependencies?
-The awesome guys at the [dustcloud project](https://github.com/dgiese/dustcloud) put together all the needed binary dependencies in a single tgz file, which you can find in this repo as `oucher_deps.tgz`.
-You should be fine by just copying it to the robot and uncompress it in the root folder:
-```bash
-tar xfv oucher_deps.tgz -C /
-```
-
-You can do this from your shell, in the folder where you downloaded the `oucher_deps.tgz` file:
-```
-export IP=192.168.1.33
-scp oucher_deps.tgz root@$IP:/root
-ssh root@$IP tar xfv /root/oucher_deps.tgz -C /
-ssh root@$IP rm /root/oucher_deps.tgz
-```
-Just replace `192.168.1.33` in the first command with your Roborock IP.
-
 ## How can I build the executable by myself?
 You need to have [Golang already installed](https://golang.org/doc/install).
 
