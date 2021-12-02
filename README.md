@@ -26,6 +26,7 @@ Then:
 - If you already had a previous version, log into SSH to the device and stop the oucher service: `service oucher stop`
 - Copy `oucher` to the Roborock, in `/usr/local/bin`
 - Copy the startupt script to the Roborock, in `/etc/init`. On the most recent models and firmware versions, the right startup script is `S12oucher`, while  on the other ones it's `oucher.conf`. Only one of them will work, the other one will be ignored, so if you're in doubt try one and then the other, or just copy both of them, it won't cause any damage.
+- If you used the `S12oucher` script, don't forget to mark it as executable: `chmod +x /etc/init/S12oucher`
 - Log into SSH to the device
 - If you're using a recent firmware version, edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot
 - Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
@@ -64,6 +65,8 @@ sudo apt install -y libasound2-dev:armhf
 ```
 
 Now clone the repo, go into the `src` directory and run `./build.sh`. It will create the `oucher` file in the base project directory.
+
+Even easier: if you have Docker, you can go into the project directory and run `./src/build-docker.sh` to generate the binary.
 
 ## It isn't working anymore on the latest firmware.
 Please ensure you're using the latest binary available on the repository, and that you've set LOG_LEVEL to 8 in the `/opt/rockrobo/rrlog/rrlog.conf` file.
