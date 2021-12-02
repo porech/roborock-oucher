@@ -230,13 +230,20 @@ func initFollower(filename string) (*follower.Follower, error) {
 // Process a single line
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
-	// If there is no ":Bumper" or "bumper 00 001 001 3" in the line, do nothing
-	if !strings.Contains(line, ":Bumper") && !strings.Contains(line, "bumper 00 001 001 3") && !strings.Contains(line, ": Bumper") {
+	// Whitelists: strings that must be in the line for the event to be considered
+	if !strings.Contains(line, ":Bumper") &&
+		!strings.Contains(line, "bumper 00 001 001 3") &&
+		!strings.Contains(line, ": Bumper") &&
+		// S5 Max (https://github.com/porech/roborock-oucher/issues/14)
+		!strings.Contains(line, "HandleTrap TrapHardWalkDetector  bumper counter") {
 		return
 	}
 
-	// If there is "Curr:(0, 0, 0)" "bumper 00 001 001 3 0 0 0" in the line, do nothing (it's a bumper restore info)
-	if strings.Contains(line, "Curr:(0, 0, 0)") || strings.Contains(line, "bumper 00 001 001 3 0 0 0") {
+	// Blacklists: strings that must NOT be in the line for the event to be considered
+	if strings.Contains(line, "Curr:(0, 0, 0)") ||
+		strings.Contains(line, "bumper 00 001 001 3 0 0 0") ||
+		// https://github.com/porech/roborock-oucher/issues/17
+		strings.Contains(line, "Start subscribe type") {
 		return
 	}
 
