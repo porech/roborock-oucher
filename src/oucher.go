@@ -243,7 +243,9 @@ func processLine(line string, phrases []phrase, config *configuration) {
 	if strings.Contains(line, "Curr:(0, 0, 0)") ||
 		strings.Contains(line, "bumper 00 001 001 3 0 0 0") ||
 		// https://github.com/porech/roborock-oucher/issues/17
-		strings.Contains(line, "Start subscribe type") {
+		strings.Contains(line, "Start subscribe type") ||
+		// https://github.com/porech/roborock-oucher/issues/17#issuecomment-991902784
+		strings.Contains(line, "BumperDataRecorder::BumperDataRecorderConfig") {
 		return
 	}
 
