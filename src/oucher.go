@@ -227,25 +227,51 @@ func initFollower(filename string) (*follower.Follower, error) {
 	return t, err
 }
 
+// allowed: strings that must be in the line for the event to be considered
+var allowed = []string{
+	":bumper",
+	"bumper 00 001 001 3",
+	": bumper",
+	// S5 Max (https://github.com/porech/roborock-oucher/issues/14)
+	"handletrap traphardwalkdetector  bumper counter",
+}
+
+// denied: strings that must NOT be in the line for the event to be considered
+var denied = []string{
+	"curr:(0, 0, 0)",
+	"bumper 00 001 001 3 0 0 0",
+	// https://github.com/porech/roborock-oucher/issues/17
+	"subscribe",
+	"suscribe",
+	// https://github.com/porech/roborock-oucher/issues/17#issuecomment-991902784
+	"bumperdatarecorder::bumperdatarecorderconfig",
+}
+
+func stringInArray(str string, arr []string) bool {
+	for _, s := range arr {
+		if strings.Contains(str, s) {
+			return true
+		}
+	}
+	return false
+}
+
+func isLineValid(line string) bool {
+	lowercaseLine := strings.ToLower(line)
+	if !stringInArray(lowercaseLine, allowed) {
+		return false
+	}
+	if stringInArray(lowercaseLine, denied) {
+		return false
+	}
+	return true
+}
+
 // Process a single line
 func processLine(line string, phrases []phrase, config *configuration) {
 	log.Tracef("Received line: %s", line)
-	// Whitelists: strings that must be in the line for the event to be considered
-	if !strings.Contains(line, ":Bumper") &&
-		!strings.Contains(line, "bumper 00 001 001 3") &&
-		!strings.Contains(line, ": Bumper") &&
-		// S5 Max (https://github.com/porech/roborock-oucher/issues/14)
-		!strings.Contains(line, "HandleTrap TrapHardWalkDetector  bumper counter") {
-		return
-	}
 
-	// Blacklists: strings that must NOT be in the line for the event to be considered
-	if strings.Contains(line, "Curr:(0, 0, 0)") ||
-		strings.Contains(line, "bumper 00 001 001 3 0 0 0") ||
-		// https://github.com/porech/roborock-oucher/issues/17
-		strings.Contains(line, "Start subscribe type") ||
-		// https://github.com/porech/roborock-oucher/issues/17#issuecomment-991902784
-		strings.Contains(line, "BumperDataRecorder::BumperDataRecorderConfig") {
+	if !isLineValid(line) {
 		return
 	}
 
