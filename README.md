@@ -113,7 +113,7 @@ ssh root@$IP rm -r /mnt/data/oucher
 Just replace `192.168.1.33` in the first command with your Roborock IP.
 
 ## How does it work?
-The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log` (or other files, depending on the model and firmware version). This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, invokes `espeak` piped with `aplay` for text-to-speech, or `aplay` alone for WAVs. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
+The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log` (or other files, depending on the model and firmware version). This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, plays a random WAV file. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
 
 ## I used an old version that looked for the oucher.yml file in /etc. Do I need to move it?
 You're not forced to move it: the configuration file is also looked up from the /etc folder, like in previous versions. Anyway, we strongly suggest to put it in /mnt/data/oucher, so you won't lose it in case of firmware upgrade (see above).
