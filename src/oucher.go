@@ -55,7 +55,7 @@ func main() {
 	// Set default configuration
 	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
-	viper.SetDefault("logPaths", []string{"/run/shm/PLAYER_fprintf.log", "/run/shm/NAV_normal.log", "/run/shm/NAV_TRAP_normal.log"})
+	viper.SetDefault("logPaths", []string{"/run/shm/NAV_normal.log", "/run/shm/NAV_TRAP_normal.log"})
 	viper.SetDefault("volume", 100)
 	viper.SetDefault("logLevel", "info")
 
@@ -63,7 +63,6 @@ func main() {
 	viper.SetConfigName("oucher")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("/mnt/data/oucher")
-	viper.AddConfigPath("/etc")
 	viper.SetConfigType("yml")
 
 	if err := viper.ReadInConfig(); err != nil {
