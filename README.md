@@ -12,44 +12,44 @@ It has been tested on:
 - Xiaomi Mi Vacuum Cleaner gen2
 - Roborock S5
 - Roborock S6
+- Roborock S6 Pure
 
 It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is that it doesn't work. The screams, not the robot ;)
 
 In all of this README I will talk about "Roborock" to mention the robot. This is just for simplicity: the instructions apply to all the compatible models.
 
 ## How do I install this?
-First of all, you need to have a rooted Roborock. Please refer to [this wiki page](https://github.com/dgiese/dustcloud/wiki/VacuumRobots-manual-update-root-Howto) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
+First of all, you need to have a rooted Roborock. Please refer to [this wiki page](https://valetudo.cloud/pages/installation/roborock.html) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
 
 Clone or download this GIT repository, and enter its folder from your terminal.
 
 Then:
 - If you already had a previous version, log into SSH to the device and stop the oucher service: `service oucher stop`
-- Copy `oucher` to the Roborock, in `/usr/local/bin`
-- Copy the startupt script to the Roborock, in `/etc/init`. On the most recent models and firmware versions, the right startup script is `S12oucher`, while  on the other ones it's `oucher.conf`. Only one of them will work, the other one will be ignored, so if you're in doubt try one and then the other, or just copy both of them, it won't cause any damage.
-- If you used the `S12oucher` script, don't forget to mark it as executable: `chmod +x /etc/init/S12oucher`
-- Log into SSH to the device
-- If you're using a recent firmware version, edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot
-- Make the oucher file executable by running: `chmod +x /usr/local/bin/oucher`
 - Create the `/mnt/data/oucher/sounds` directory
 - Copy your WAV files inside it, or copy the three files in the `sounds` folder of the repository
+- Copy `oucher` `S12oucher` `oucher.yml` and `oucher.conf` to the Roborock, in `/mnt/data/oucher`.
+- Log into SSH to the device
+- Don't forget to mark it as executable `oucher` and `S12oucher` : `chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher`
+- If you're using a recent firmware version but an old robot (just try), edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot ( if the file isn't writable or doesn't exists that means that you have a newer robot so just pass, don't reboot) 
+- Edit `/mnt/reserve/_root.sh` to add `if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi`
 - Reboot the device
 
 All of this can be executed from the shell, from the folder in which you cloned the GIT repository:
 ```
 export IP=192.168.1.33
 ssh root@$IP service oucher stop
-scp oucher root@$IP:/usr/local/bin
-scp oucher.conf root@$IP:/etc/init
-scp S12oucher root@$IP:/etc/init
-ssh root@$IP chmod +x /usr/local/bin/oucher
-ssh root@$IP sed -i -r 's/LOG_LEVEL=[0-9]*/LOG_LEVEL=8/' /opt/rockrobo/rrlog/rrlog.conf
 ssh root@$IP mkdir -p /mnt/data/oucher/sounds
-rsync -rav sounds/ root@$IP:/mnt/data/oucher/sounds/
+scp -O sounds/* root@$IP:/mnt/data/oucher/sounds/
+scp -O *oucher* root@$IP:/mnt/data/oucher/
+ssh root@$IP chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher
+ssh root@$IP sed -i -r 's/LOG_LEVEL=[0-9]*/LOG_LEVEL=8/' /opt/rockrobo/rrlog/rrlog.conf
+ssh root@$IP sed -i '/REL/a if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi' /mnt/reserve/_root.sh
 ssh root@$IP reboot
 ```
 Just replace `192.168.1.33` in the first command with your Roborock IP.
 
-Depending on your model, some of the commands may return errors. Don't worry and go on with the next one.
+For newer robots changing the log level will not work but we have other logs that tell us when there is a but so don't worry about this line.
+If you have any other errors please open an issue so tha we can fix the script to work for everyone.
 
 Done! Just start a clean and wait for the first bump ;)
 
