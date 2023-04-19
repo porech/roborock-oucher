@@ -3,7 +3,7 @@
 load() {
     curtime=`cat /proc/uptime | awk -F ' ' '{print $1}'`
     echo "[$curtime] start oucher"
-    start-stop-daemon -S -b -q -m -p /var/run/oucher.pid -x /usr/local/bin/oucher
+    start-stop-daemon -S -b -q -m -p /var/run/oucher.pid -x /mnt/data/oucher/oucher
 }
 
 unload() {
