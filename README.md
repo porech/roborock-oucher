@@ -19,7 +19,7 @@ It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use
 In all of this README I will talk about "Roborock" to mention the robot. This is just for simplicity: the instructions apply to all the compatible models.
 
 ## How do I install this?
-First of all, you need to have a rooted Roborock. Please refer to [this wiki page](https://valetudo.cloud/pages/installation/roborock.html) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
+First of all, you need to have a rooted Roborock. Please refer to [this page](https://valetudo.cloud/pages/installation/roborock.html) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
 
 Clone or download this GIT repository, and enter its folder from your terminal.
 
