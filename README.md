@@ -27,11 +27,14 @@ Then:
 - If you already had a previous version, log into SSH to the device and stop the oucher service: `service oucher stop`
 - Create the `/mnt/data/oucher/sounds` directory
 - Copy your WAV files inside it, or copy the three files in the `sounds` folder of the repository
-- Copy `oucher` `S12oucher` `oucher.yml` and `oucher.conf` to the Roborock, in `/mnt/data/oucher`.
+- Copy `oucher`, `S12oucher`, `oucher.yml` and `oucher.conf` to the Roborock, in `/mnt/data/oucher`.
 - Log into SSH to the device
-- Don't forget to mark it as executable `oucher` and `S12oucher` : `chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher`
-- If you're using a recent firmware version but an old robot (just try), edit the `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8 and reboot ( if the file isn't writable or doesn't exists that means that you have a newer robot so just pass, don't reboot) 
-- Edit `/mnt/reserve/_root.sh` to add `if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi`
+- Mark `oucher` and `S12oucher` as executable by running: `chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher`
+- You may need to edit `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8. This is needed only on newer firmware versions runnign on old robots. If you can find and edit the file, then perform the change. If you can't, it's probably not needed, so you can go on the next step. 
+- Edit `/mnt/reserve/_root.sh` adding this line at the end:
+```
+if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi
+```
 - Reboot the device
 
 All of this can be executed from the shell, from the folder in which you cloned the GIT repository:
@@ -40,16 +43,13 @@ export IP=192.168.1.33
 ssh root@$IP service oucher stop
 ssh root@$IP mkdir -p /mnt/data/oucher/sounds
 scp -O sounds/* root@$IP:/mnt/data/oucher/sounds/
-scp -O *oucher* root@$IP:/mnt/data/oucher/
+scp -O oucher S12oucher oucher.yml oucher.conf root@$IP:/mnt/data/oucher/
 ssh root@$IP chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher
 ssh root@$IP sed -i -r 's/LOG_LEVEL=[0-9]*/LOG_LEVEL=8/' /opt/rockrobo/rrlog/rrlog.conf
 ssh root@$IP sed -i '/REL/a if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi' /mnt/reserve/_root.sh
 ssh root@$IP reboot
 ```
 Just replace `192.168.1.33` in the first command with your Roborock IP.
-
-For newer robots changing the log level will not work but we have other logs that tell us when there is a but so don't worry about this line.
-If you have any other errors please open an issue so tha we can fix the script to work for everyone.
 
 Done! Just start a clean and wait for the first bump ;)
 
