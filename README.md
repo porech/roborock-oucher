@@ -4,7 +4,7 @@
 ## What is it?
 Some time ago, Michael Reeves made [a video that went viral](https://www.youtube.com/watch?v=mvz3LRK263E), with a Roomba that was modded to scream when it bumps into something. Michael removed many components from the Roomba, and that made the robot really funny but totally useless.
 
-However, the Roborock, better known as Xiaomi Mi Vacuum Cleaner, already has all the components it needs to get the same result without any hardware modification, and without loosing any native functionality. So, we made up a Golang application that can be used on a rooted Roborock cleaner.
+However, the Roborock, better known as Xiaomi Mi Vacuum Cleaner, already has all the components it needs to get the same result without any hardware modification, and without losing any native functionality. So, we made up a Golang application that can be used on a rooted Roborock cleaner.
 
 ## What models does it work on?
 It has been tested on:
@@ -95,7 +95,7 @@ We're grouping some funny sound packs [on this page](http://www.linuxzogno.org/o
 You can set a delay in the configuration file. This way, the software will make sure that, after a scream is played, another one won't be played in the next N seconds. Set, for example, `delay: 10` and it will feel much better!
 
 ## What happens on a firmware upgrade?
-A firmware upgrade will remove Oucher along with its dependencies and the root access. However, the `/mnt/data/oucher` folder is not deleted, so your configuration and custom sounds (if you put them here) are safe. You can root the device again and install Oucher back following the setup procedure above. Everything will work as before.
+A firmware upgrade will remove the Oucher startup scripts, and you will lose root access. However, the `/mnt/data/oucher` folder is not deleted, so your configuration and custom sounds (if you put them here) are safe. You can root the device again and install Oucher back following the setup procedure above. Everything will work as before.
 
 However, if you spent hours looking for the perfect sounds, we **strongly** recommend you to backup the config and WAV files, so you won't have to worry if for some reason you need to perform a factory reset.
 
