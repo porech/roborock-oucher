@@ -30,7 +30,7 @@ Then:
 - Copy `oucher`, `S12oucher`, `oucher.yml` and `oucher.conf` to the Roborock, in `/mnt/data/oucher`.
 - Log into SSH to the device
 - Mark `oucher` and `S12oucher` as executable by running: `chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher`
-- You may need to edit `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8. This is needed only on newer firmware versions runnign on old robots. If you can find and edit the file, then perform the change. If you can't, it's probably not needed, so you can go on the next step. 
+- You may need to edit `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8. This is needed only on newer firmware versions running on old robots. If you can find and edit the file, then perform the change. If you can't, it's probably not needed, so you can go on the next step. 
 - Edit `/mnt/reserve/_root.sh` adding this line at the end:
 ```
 if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi
