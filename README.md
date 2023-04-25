@@ -13,8 +13,9 @@ It has been tested on:
 - Roborock S5
 - Roborock S6
 - Roborock S6 Pure
+- Roborock S7
 
-It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is that it doesn't work. The screams, not the robot ;)
+It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is that Oucher doesn't work, without any damage.
 
 In all of this README I will talk about "Roborock" to mention the robot. This is just for simplicity: the instructions apply to all the compatible models.
 
@@ -102,15 +103,7 @@ However, if you spent hours looking for the perfect sounds, we **strongly** reco
 ## How can I remove it?
 If you just want to disable the software but be able to enable it back easily, you can just set `enabled: false` in the configuration. This way, the software does absolutely nothing: after loading the configuration, it just sleeps, without reading the log file or anything else.
 
-If you want to totally remove the software, just delete the `/usr/local/bin/oucher`, `/etc/init/oucher.conf`, and `/etc/init/S12oucher` files. Also remove the `/mnt/data/oucher` folder.  
-
-From the shell:
-```
-export IP=192.168.1.33
-ssh root@$IP rm /usr/local/bin/oucher /etc/init/oucher.conf
-ssh root@$IP rm -r /mnt/data/oucher
-```
-Just replace `192.168.1.33` in the first command with your Roborock IP.
+If you want to totally remove the software, just delete the `/mnt/data/oucher` folder, and remove the line you added to `/mnt/reserve/_root.sh`.  
 
 ## How does it work?
 The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log` (or other files, depending on the model and firmware version). This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, plays a random WAV file. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
