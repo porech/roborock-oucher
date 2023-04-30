@@ -20,39 +20,60 @@ It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use
 In all of this README I will talk about "Roborock" to mention the robot. This is just for simplicity: the instructions apply to all the compatible models.
 
 ## How do I install this?
-First of all, you need to have a rooted Roborock. Please refer to [this page](https://valetudo.cloud/pages/installation/roborock.html) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. :)
+First of all, you need to have a rooted Roborock. Please refer to [this page](https://valetudo.cloud/pages/installation/roborock.html) or search on the Internet about how to root your device. It's quite easy, but we won't offer support for this, sorry. 🙃
 
-Clone or download this GIT repository, and enter its folder from your terminal.
+Clone or download this GIT repository to have all the files you need in the following steps.
 
-Then:
-- If you already had a previous version, log into SSH to the device and stop the oucher service: `service oucher stop`
-- Create the `/mnt/data/oucher/sounds` directory
-- Copy your WAV files inside it, or copy the three files in the `sounds` folder of the repository
-- Copy `oucher`, `S12oucher`, `oucher.yml` and `oucher.conf` to the Roborock, in `/mnt/data/oucher`.
-- Log into SSH to the device
-- Mark `oucher` and `S12oucher` as executable by running: `chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher`
-- You may need to edit `/opt/rockrobo/rrlog/rrlog.conf` setting the LOG_LEVEL to 8. This is needed only on newer firmware versions running on old robots. If you can find and edit the file, then perform the change. If you can't, it's probably not needed, so you can go on the next step. 
-- Edit `/mnt/reserve/_root.sh` adding this line at the end:
-```
-if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi
-```
-- Reboot the device
+### Step 1 | Copy the required files
+1. Create the `/mnt/data/oucher` directory on the Roborock
+2. Copy the `oucher` file (the one with no extension) from this repository into the created folder
+3. Make the file executable by running `chmod +x /mnt/data/oucher/oucher` into your SSH session
+4. Create the `sounds` directory into `/mnt/data/oucher` on the Roborock
+5. Copy your screams WAV files into it, or copy the three example files that are in the `sounds` folder of the repository
+6. You may need to edit the `/opt/rockrobo/rrlog/rrlog.conf` file and set the LOG_LEVEL variable to 8. This is needed only on some firmwares. If you can find the file and it's writable, then perform the change. If you can't, it's probably not needed, so you can ignore this and proceed
 
-All of this can be executed from the shell, from the folder in which you cloned the GIT repository:
-```
-export IP=192.168.1.33
-ssh root@$IP service oucher stop
-ssh root@$IP mkdir -p /mnt/data/oucher/sounds
-scp -O sounds/* root@$IP:/mnt/data/oucher/sounds/
-scp -O oucher S12oucher oucher.yml oucher.conf root@$IP:/mnt/data/oucher/
-ssh root@$IP chmod +x /mnt/data/oucher/S12oucher /mnt/data/oucher/oucher
-ssh root@$IP sed -i -r 's/LOG_LEVEL=[0-9]*/LOG_LEVEL=8/' /opt/rockrobo/rrlog/rrlog.conf
-ssh root@$IP sed -i '/REL/a if [[ -f /mnt/data/oucher/oucher ]]; then if [[ -f /run/shm/PLAYER_fprintf.log ]]; then /mnt/data/oucher/oucher.conf; else /mnt/data/oucher/S12oucher start; fi; fi' /mnt/reserve/_root.sh
-ssh root@$IP reboot
-```
-Just replace `192.168.1.33` in the first command with your Roborock IP.
+You can now do a first test to ensure everything is set up correctly:
+1. Into your SSH session, run this command: `/mnt/data/oucher/oucher`. You'll probably receive a warning about missing configuration file: it's fine, you can ignore it (see the "How can I customize the parameters?" section below for more info).
+2. Keep the software running and don't close your SSH session. Start a clean and hit the bumper: the robot should play one of your screams.
 
-Done! Just start a clean and wait for the first bump ;)
+If it works, you can hit CTRL+C to close Oucher and proceed to the next step. If not, ensure you correctly followed the procedure. You also may have a model that Oucher doesn't support yet; please open a issue and we'll sort it out.
+
+
+### Step 2 | Run Oucher at startup
+Now, up to the hard part: we need to run Oucher as a service when the robot boots.
+
+Unfortunately, the method to do so depends on the robot you have, on the firmware version and on how you rooted it. There's not a single solution.
+
+Here are a few solutions that have been reported to work, from the most common to the least one. You can safely try all of them, they're harmless.
+
+**- Solution 1: Using a systemd config file -**  
+Copy the `oucher.conf` file from this repository into the `/etc/init` folder of the robot. If the folder is not writable, then this solution is not for you. Reboot the robot by running `reboot` on the SSH session. Try starting a clean and hit the bumper. If it doesn't work, delete the `oucher.conf` file from the robot and try the next solution.
+
+**- Solution 2: using an init script -**  
+This is usually effective on older firmware versions. Copy the `S12oucher` script from this repository into the `/etc/init` folder of the robot. If the folder is not writable, then this solution is not for you. Mark the file as executable by running `chmod +x /etc/init/S12oucher` in your SSH session, and reboot the robot by running `reboot`. Try starting a clean and hit the bumper. If it doesn't work, delete the `S12oucher` file from the robot and try the next solution.
+
+**- Solution 3: use the script in the reserve folder -**  
+This has been reported to work on Roborock S6 Pure with Valetudo. 
+1. Ensure that the `/mnt/reserve/_root.sh` file already exists; if it doesn't, this solution is not for you
+2. Copy the `S12oucher` script from this repository into the `/mnt/data/oucher` folder of the robot and mark it as executable by running `chmod +x /mnt/data/oucher/S12oucher` in your SSH session
+3. Add this snippet of code at the end of the `/mnt/reserve/_root.sh` file:
+```
+if [[ -f /mnt/data/oucher/S12oucher ]]; then /mnt/data/oucher/S12oucher start; fi
+```
+4. Reboot the robot by running `reboot` in your SSH session
+5. Try starting a clean and hit the bumper
+
+If it doesn't work, delete the `/mnt/data/oucher/S12oucher` from the robot and remove the snippet of code you added to `/mnt/reserve/_root.sh`, then proceed to the next solution.
+
+**- Solution 4: using cron -**  
+Run `EDITOR=nano crontab -e` in the SSH session: this will open the crontab editor. Add this line:
+```
+@reboot /mnt/data/oucher/oucher
+```
+Hit CTRL+O and then Enter to save the file, and then CTRL+X to exit the editor. Reboot the robot by running `reboot`. Try starting a clean and hit the bumper. If it doesn't work, remove the line you just added to crontab using the same procedure as above.
+
+If none of the solutions worked, please open an issue and we'll sort out another way.
+
 
 ## How can I build the executable by myself?
 You need to have [Golang already installed](https://golang.org/doc/install).

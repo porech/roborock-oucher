@@ -52,6 +52,8 @@ func main() {
 	// Initialize ouching mutex
 	ouchingMutex = &sync.Mutex{}
 
+	log.Info("Oucher is starting")
+
 	// Set default configuration
 	viper.SetDefault("enabled", true)
 	viper.SetDefault("soundsPath", "/mnt/data/oucher/sounds")
@@ -139,6 +141,8 @@ func main() {
 		log.Debugf("Starting log watching from %s", FilePath)
 		go watchLog(FilePath, phrases, &config)
 	}
+
+	log.Info("Oucher started, waiting for bumps")
 
 	// Sit and wait
 	select {}
