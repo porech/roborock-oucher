@@ -103,13 +103,13 @@ scp oucher.yml root@192.168.1.33:/mnt/data/oucher
 ```
 Just replace `192.168.1.33` with your Roborock IP.
 
-Remember to restart the service with `service oucher restart` each time you make changes to the configuration, because the file is read on startup only.
+Remember to restart the service (or reboot the robot) each time you make changes to the configuration, because the file is read on startup only.
 
 ## Can I use my own screams?
 Yes! You can copy them into the /mnt/data/oucher/sounds folder (no MP3, just WAV).  
 If you prefer to put the files in a different folder, you can customize the `soundsPath` parameter in the config file.
 
-Remember to restart the service with `service oucher restart` each time you add or remove a WAV file, because the list is loaded on startup only.
+Remember to restart the service (or reboot the robot) each time you add or remove a WAV file, because the list is loaded on startup only.
 
 We're grouping some funny sound packs [on this page](http://www.linuxzogno.org/oucher-sounds/): they're made by Oucher users with samples found on the Internet. If you own copyright for some of the files and you don't like them to be there, please open an issue and we'll remove them.
 
@@ -124,7 +124,7 @@ However, if you spent hours looking for the perfect sounds, we **strongly** reco
 ## How can I remove it?
 If you just want to disable the software but be able to enable it back easily, you can just set `enabled: false` in the configuration. This way, the software does absolutely nothing: after loading the configuration, it just sleeps, without reading the log file or anything else.
 
-If you want to totally remove the software, just delete the `/mnt/data/oucher` folder, and remove the line you added to `/mnt/reserve/_root.sh`.  
+If you want to totally remove the software, just delete the `/mnt/data/oucher` folder and revert the changes you made to run it as a service, depending on the solution you used to do so.  
 
 ## How does it work?
 The Roborock service logs everything that happens while cleaning in a file: `/run/shm/PLAYER_fprintf.log` (or other files, depending on the model and firmware version). This includes bumps into obstacles. The software just follows the log file and, everytime a bump occurs, plays a random WAV file. A semaphore avoids overlapped screams if multiple bumps occurr in a rapid sequence.
