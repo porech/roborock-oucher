@@ -50,7 +50,7 @@ Here are a few solutions that have been reported to work, from the most common t
 Copy the `oucher.conf` file from this repository into the `/etc/init` folder of the robot. If the folder is not writable, then this solution is not for you. Reboot the robot by running `reboot` on the SSH session. Try starting a clean and hit the bumper. If it doesn't work, delete the `oucher.conf` file from the robot and try the next solution.
 
 **- Solution 2: using an init script -**  
-This is usually effective on older firmware versions. Copy the `S12oucher` script from this repository into the `/etc/init` folder of the robot. If the folder is not writable, then this solution is not for you. Mark the file as executable by running `chmod +x /etc/init/S12oucher` in your SSH session, and reboot the robot by running `reboot`. Try starting a clean and hit the bumper. If it doesn't work, delete the `S12oucher` file from the robot and try the next solution.
+Copy the `S12oucher` script from this repository into the `/etc/init` folder of the robot. If the folder is not writable, then this solution is not for you. Mark the file as executable by running `chmod +x /etc/init/S12oucher` in your SSH session, and reboot the robot by running `reboot`. Try starting a clean and hit the bumper. If it doesn't work, delete the `S12oucher` file from the robot and try the next solution.
 
 **- Solution 3: use the script in the reserve folder -**  
 This has been reported to work on Roborock S6 Pure with Valetudo. 
