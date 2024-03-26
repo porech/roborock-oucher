@@ -62,6 +62,7 @@ func main() {
 		"/run/shm/NAV_normal.log",
 		"/run/shm/NAV_normal_pl9.log",
 		"/run/shm/NAV_TRAP_normal.log",
+		"/run/shm/RRLDR_SERVER_normal.log",
 	})
 	viper.SetDefault("volume", 100)
 	viper.SetDefault("logLevel", "info")
@@ -243,6 +244,7 @@ var allowed = []string{
 	": bumper",
 	// S5 Max (https://github.com/porech/roborock-oucher/issues/14)
 	"handletrap traphardwalkdetector  bumper counter",
+	"Bumper On",
 }
 
 // denied: strings that must NOT be in the line for the event to be considered
