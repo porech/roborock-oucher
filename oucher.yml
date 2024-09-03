@@ -11,6 +11,11 @@ volume: 100
 # - default: 0
 delay: 0
 
+# Set a percentage chance that a scream will play (0-100), making screams somewhat random.
+# For example, setting to 50 will mean only about 1/2 of bumps will trigger a scream.
+# - default: 100
+ouchChance: 100
+
 # Set the directory where WAV files are stored.
 # - default: "/mnt/data/oucher/sounds"
 soundsPath: "/mnt/data/oucher/sounds"
