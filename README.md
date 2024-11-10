@@ -14,6 +14,7 @@ It has been tested on:
 - Roborock S6
 - Roborock S6 Pure
 - Roborock S7
+- Roborock Q7 Max+
 
 It should work on any Roborock/Xiaomi Mi Vacuum Cleaner: if you successfully use it on other models please let us know by adding an issue so we can add it to the list. Don't be too scared to try if you don't have a compatible model: the software just reads a log file and doesn't make any modification to the system, so the worst thing that can happen is that Oucher doesn't work, without any damage.
 
