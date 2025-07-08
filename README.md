@@ -10,6 +10,7 @@ However, the Roborock, better known as Xiaomi Mi Vacuum Cleaner, already has all
 It has been tested on:
 - Xiaomi Mi Vacuum Cleaner gen1
 - Xiaomi Mi Vacuum Cleaner gen2
+- Roborock S4
 - Roborock S5
 - Roborock S6
 - Roborock S6 Pure
