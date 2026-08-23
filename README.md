@@ -12,6 +12,7 @@ It has been tested on:
 - Xiaomi Mi Vacuum Cleaner gen2
 - Roborock S4
 - Roborock S5
+- Roborock S5 Max
 - Roborock S6
 - Roborock S6 Pure
 - Roborock S7
